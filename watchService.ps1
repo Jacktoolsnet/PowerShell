@@ -7,7 +7,7 @@ $serviceName = 'cbdhsvc_3c8994f';
 
 #How often shoud the skript try to start the service
 $tries = 3
-$countTries = 2
+$countTries = 0
 $sleepTime = 30
 
 #Url
