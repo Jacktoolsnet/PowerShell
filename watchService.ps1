@@ -2,15 +2,15 @@ Add-Type -AssemblyName System.Web
 #The localHost
 $localHost = $env:computername
 
-# start the following Windows service:
+# Watch the following Windows service:
 $serviceName = 'cbdhsvc_3c8994f';
 
-#How often shoud the skript try to start the service
+# How often shoud the skript try to start the service
 $tries = 3
 $countTries = 0
 $sleepTime = 30
 
-#Url
+# Url
 $backEnd = 'https://myBackend.com/log'
 $hn = '?hostName=' + [System.Web.HttpUtility]::UrlEncode($localHost)
 $sn = '&serviceName=' + [System.Web.HttpUtility]::UrlEncode($serviceName)
@@ -25,12 +25,15 @@ while (($service.Status -ne 'Running') -and ($countTries -lt $tries))
 {
     $url = $backEnd + $hn + $sn + $stopped
     Invoke-WebRequest -URI $url
+    # Start service.
     Start-Service $serviceName
     write-host $service.status
     write-host '(' $countTries ')' 'Try starting service: ' $serviceName
     $url = $backEnd + $hn + $sn + $starting
     Invoke-WebRequest -URI $url
+    # Sleep.
     Start-Sleep -seconds $sleepTime
+    # Check again.
     $service.Refresh()
     if ($service.Status -ne 'Running')
     {
